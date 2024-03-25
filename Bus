@@ -1,0 +1,8 @@
+#include <stdio.h>
+
+struct Bus {
+    
+    int id; //bus name
+    int start; //starting point of the bus
+    int destination; //final destination of the bus
+}
