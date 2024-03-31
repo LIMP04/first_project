@@ -1,0 +1,14 @@
+#include <iostream>
+#include <vector>
+#include <climits>
+using namespace std;
+
+const int INF = INT_MAX;
+
+class TransportationSystem {
+    private:
+    vector<vector<int>> graph;
+    
+    public:
+    TransportationSystem(int N) : graph(N, vector<int>(N, INF)) {}
+};
