@@ -10,3 +10,7 @@
             }
         }
     }
+
+vector<vector<int>> getGraph() const {
+        return graph;
+    } //возвращает матрицу смежности
