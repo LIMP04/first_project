@@ -1,0 +1,27 @@
+void dijkstra(const vector<vector<int>>& graph, int start, int N, vector<int>& distances) {
+    vector<bool> visited(N, false); //  вектор посещенных вершин, инициализированный как false
+    distances.assign(N, INF); //  вектор расстояний до всех вершин как бесконечность
+    distances[start] = 0; // расстояние от начальной вершины до себя даем 0
+
+    for (int i = 0; i < N - 1; ++i) { //  цикл N-1 раз
+        int minDist = INF, minIndex = -1;
+        
+        for (int j = 0; j < N; ++j) { //  вершина с минимальным расстоянием, которую еще не посетили
+            if (!visited[j] && distances[j] < minDist) {
+                minDist = distances[j];
+                minIndex = j;
+            }
+        }
+
+        if (minIndex == -1)  // Если -1, значит все вершины уже посещены
+            break;
+
+        visited[minIndex] = true; //  текущая вершина как посещенная
+
+        for (int j = 0; j < N; ++j) { // Обновляем расстояния до всех вершин через текущую вершину
+            if (!visited[j] && graph[minIndex][j] != INF && distances[minIndex] + graph[minIndex][j] < distances[j]) {
+                distances[j] = distances[minIndex] + graph[minIndex][j];
+            }
+        }
+    }
+}
