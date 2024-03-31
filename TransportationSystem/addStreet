@@ -1,0 +1,3 @@
+void addStreet(int u, int v, int k){
+graph[u][v] = graph[v][u] = k;
+}
