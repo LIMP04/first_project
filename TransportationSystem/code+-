@@ -1,0 +1,92 @@
+#include <iostream>
+#include <vector>
+#include <climits>
+
+using namespace std;
+
+const int INF = INT_MAX;
+
+class CityGraph {
+private:
+    vector<vector<int>> graph;
+
+public:
+    CityGraph(int N) : graph(N, vector<int>(N, INF)) {}
+
+    void addStreet(int u, int v, int k) {
+        graph[u][v] = graph[v][u] = k;
+    }
+
+    void floydWarshall() {
+        int N = graph.size();
+        for (int k = 0; k < N; ++k) {
+            for (int i = 0; i < N; ++i) {
+                for (int j = 0; j < N; ++j) {
+                    if (graph[i][k] != INF && graph[k][j] != INF && graph[i][k] + graph[k][j] < graph[i][j]) {
+                        graph[i][j] = graph[i][k] + graph[k][j];
+                    }
+                }
+            }
+        }
+    }
+
+    vector<vector<int>> getGraph() const {
+        return graph;
+    }
+};
+
+
+int main() {
+    int N, M;
+    cout << "Enter the number of crossroads and streets: ";
+    cin >> N >> M;
+
+    CityGraph city(N);
+
+    cout << "Enter the streets (u v k):" << endl;
+    for (int i = 0; i < M; ++i) {
+        int u, v, k;
+        cin >> u >> v >> k;
+        city.addStreet(u, v, k);
+    }
+
+    city.floydWarshall();
+    vector<vector<int>> graph = city.getGraph();
+
+    vector<vector<int>> buses;
+    vector<int> busDestinations;
+
+    cout << "Enter operations (add_bus, Construct_crossroad, common_streets), enter 'exit' to finish: " << endl;
+    while (true) {
+        string operation;
+        cin >> operation;
+
+        if (operation == "add_bus") {
+            int k, A;
+            cout << "Enter the number of destinations and starting crossroad (k A): ";
+            cin >> k >> A;
+            vector<int> destinations(k);
+            cout << "Enter destinations: ";
+            for (int i = 0; i < k; ++i) {
+                cin >> destinations[i];
+            }
+            buses.push_back(destinations);
+            int minTime = INF, closestDestination;
+            for (int destination : destinations) {
+                if (graph[A][destination] < minTime) {
+                    minTime = graph[A][destination];
+                    closestDestination = destination;
+                }
+            }
+            cout << "Closest destination: " << closestDestination << ", Minimum time: " << minTime << endl;
+        } 
+        
+        else if (operation == "exit") {
+            break;
+        } else {
+            cout << "Unknown operation. Please try again." << endl;
+        }
+    }
+
+    return 0;
+}
