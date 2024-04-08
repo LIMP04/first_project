@@ -1,0 +1,29 @@
+std::vector<unsigned int> common_streets(unsigned int I, unsigned int J) {
+    const auto &busI = buses_[I].second;
+    const auto &busJ = buses_[J].second;
+
+    std::vector<unsigned int> commonStreets;
+
+    // Run Dijkstra's algorithm on busJ to find shortest paths
+    std::vector<std::vector<unsigned int>> shortestPaths;
+    for (unsigned int i = 0; i < busJ.size() - 1; ++i) {
+        unsigned int start = busJ[i];
+        unsigned int end = busJ[i + 1];
+        shortestPaths.push_back(dijkstra(start, end));
+    }
+
+    // Check if the edges in shortest paths of busJ exist in busI
+    for (const auto &path : shortestPaths) {
+        for (unsigned int i = 0; i < path.size() - 1; ++i) {
+            unsigned int u = path[i];
+            unsigned int v = path[i + 1];
+            if (std::find(busI.begin(), busI.end(), u) != busI.end() &&
+                std::find(busI.begin(), busI.end(), v) != busI.end()) {
+                commonStreets.push_back(u);
+                commonStreets.push_back(v);
+            }
+        }
+    }
+
+    return commonStreets;
+}
